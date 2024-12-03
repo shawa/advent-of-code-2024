@@ -3,27 +3,32 @@ defmodule Advent2024.Day02.Parser do
 
   @type t() :: [Nx.Tensor.t()]
 
-  whitespace = ignore(ascii_char([32..32]) |> times(min: 1))
-  newline = ignore(ascii_char([?\n..?\n]))
+  whitespace =
+    string(" ")
+    |> times(min: 1)
+
+  newline =
+    string("\n")
 
   line =
     times(
       integer(min: 1)
-      |> concat(whitespace),
+      |> ignore(whitespace),
       min: 1
     )
     |> integer(min: 1)
-    |> concat(newline)
-    |> tag(:row)
+    |> ignore(newline)
 
   report =
-    times(line, min: 1)
+    line
+    |> tag(:row)
+    |> times(min: 1)
 
-  defparsec :report, report
+  defparsec :parse_report, report
 
   @spec parse(binary()) :: t()
   def parse(input) do
-    {:ok, results, "", _, _, _} = report(input)
+    {:ok, results, "", _context, _line, _column} = parse_report(input)
 
     results
     |> Enum.map(fn {:row, xs} ->

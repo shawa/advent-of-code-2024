@@ -1,7 +1,8 @@
 defmodule Advent2024.Day03.Parser do
   import NimbleParsec
 
-  binary_functor = string("mul")
+  binary_functor =
+    string("mul")
 
   unary_functor =
     choice([
@@ -32,7 +33,7 @@ defmodule Advent2024.Day03.Parser do
     |> eventually()
     |> times(min: 1)
 
-  defparsec :memory, memory
+  defparsec :parse_memory, memory
 
   @type instruction() ::
           :enable
@@ -41,7 +42,7 @@ defmodule Advent2024.Day03.Parser do
 
   @spec parse(binary()) :: [instruction()]
   def parse(input) do
-    {:ok, instructions, _rest, _context, _line, _column} = memory(input)
+    {:ok, instructions, _rest, _context, _line, _column} = parse_memory(input)
 
     instructions
     |> Enum.map(fn

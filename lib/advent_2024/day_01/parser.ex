@@ -3,22 +3,25 @@ defmodule Advent2024.Day01.Parser do
   @type t() :: {[integer()], [integer()]}
 
   whitespace =
-    ascii_char([32..32])
+    string(" ")
     |> times(min: 1)
 
   line =
     integer(min: 1)
     |> ignore(whitespace)
     |> integer(min: 1)
-    |> ignore(ascii_char([?\n..?\n]))
-    |> tag(:row)
+    |> ignore(string("\n"))
 
-  lists = times(line, min: 1)
-  defparsec :lists, lists
+  lists =
+    line
+    |> tag(:row)
+    |> times(min: 1)
+
+  defparsec :parse_lists, lists
 
   @spec parse!(binary) :: t()
   def parse!(input) do
-    {:ok, results, "", _, _, _} = lists(input)
+    {:ok, results, "", _context, _line, _column} = parse_lists(input)
 
     results
     |> Enum.map(fn {:row, [a, b]} -> {a, b} end)

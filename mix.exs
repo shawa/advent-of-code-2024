@@ -21,7 +21,6 @@ defmodule ExAdvent.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:scribe, "~> 0.11"},
       {:nx, "~> 0.9"},
       {:nimble_parsec, "~> 1.4"}
     ]
