@@ -5,7 +5,7 @@ defmodule ExAdvent.Day do
 
     quote do
       def input(sample_or_input \\ :input) do
-        binary = ExAdvent.Input.input_binary_for(unquote(day))
+        binary = ExAdvent.Input.input_binary_for(unquote(day), sample_or_input)
         unquote(parser).(binary)
       end
 
