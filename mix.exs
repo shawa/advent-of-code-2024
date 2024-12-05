@@ -3,11 +3,14 @@ defmodule ExAdvent.MixProject do
 
   def project do
     [
+      name: "Advent of Code 2024",
+      source_url: "https://github.com/shawa/advent_2024",
       app: :advent_2024,
       version: "0.1.0",
       elixir: "~> 1.17",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      docs: docs()
     ]
   end
 
@@ -22,7 +25,17 @@ defmodule ExAdvent.MixProject do
   defp deps do
     [
       {:nx, "~> 0.9"},
-      {:nimble_parsec, "~> 1.4"}
+      {:nimble_parsec, "~> 1.4"},
+      {:ex_doc, "~> 0.35.1"},
+      {:libgraph, "~> 0.16"}
+    ]
+  end
+
+  defp docs do
+    [
+      extras: ["README.md" | Path.wildcard("problems/*.md")],
+      main: "README",
+      logo: "logo.svg"
     ]
   end
 end
