@@ -15,8 +15,8 @@ defmodule Mix.Tasks.ExAdvent.Run do
     |> Enum.map(fn {output, i} ->
       {
         i |> inspect(),
-        Keyword.get(output, :part_one, "Not complete") |> inspect(),
-        Keyword.get(output, :part_two, "Not complete") |> inspect()
+        Keyword.get(output, :part_one, "-") |> to_string(),
+        Keyword.get(output, :part_two, "-") |> to_string()
       }
     end)
   end
