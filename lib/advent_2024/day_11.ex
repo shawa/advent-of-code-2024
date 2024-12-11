@@ -14,47 +14,36 @@ defmodule Advent2024.Day11 do
   def stones(input, iterations) do
     input
     |> Enum.frequencies()
-    |> Stream.iterate(&iterate/1)
-    |> Enum.take(iterations + 1)
-    |> Enum.map(fn next ->
-      next
-      |> Enum.map(fn {_number, count} -> count end)
-      |> Enum.sum()
-    end)
-    |> List.last()
+    |> iterate(&blink/1, iterations)
+    |> Enum.reduce(0, fn {_number, count}, acc -> count + acc end)
   end
 
-  def iterate(input) do
+  def iterate(input, _fun, 0), do: input
+  def iterate(input, fun, n), do: iterate(fun.(input), fun, n - 1)
+
+  def blink(input) do
     input
     |> Enum.flat_map(fn {n, count} ->
-      n |> tick() |> Enum.map(&{&1, count})
+      Enum.map(new_stone(n), &{&1, count})
     end)
     |> Enum.reduce(%{}, fn {k, v}, acc ->
       Map.update(acc, k, v, &(&1 + v))
     end)
   end
 
-  def tick(0), do: [1]
+  def new_stone(0), do: [1]
 
-  def tick(n) do
+  def new_stone(n) do
     digits = Integer.to_charlist(n)
+    len = length(digits)
 
-    if rem(length(digits), 2) == 0 do
-      l_r(digits)
+    if rem(len, 2) == 0 do
+      digits
+      |> Enum.split(round(len / 2))
+      |> Tuple.to_list()
+      |> Enum.map(&:erlang.list_to_integer/1)
     else
       [n * 2024]
     end
-  end
-
-  defp l_r(digits) do
-    digits
-    |> split()
-    |> Tuple.to_list()
-    |> Enum.map(&:erlang.list_to_integer/1)
-  end
-
-  def split(list) do
-    len = round(length(list) / 2)
-    Enum.split(list, len)
   end
 end
